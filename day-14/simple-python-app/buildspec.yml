@@ -14,7 +14,7 @@ phases:
       - echo "Building Docker image..."
       - docker login -u ayeshabanewale -p Ayesha@12
       - docker build -t simple-python-flask-app:latest .
-      - docker tag simple-python-flash-app:latest ayeshabanewale/society:latest
+      - docker tag docker.io/library/simple-python-flask-app:latest ayeshabanewale/society:latest
       
   post_build:
     commands:
