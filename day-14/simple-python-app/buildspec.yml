@@ -1,31 +1,36 @@
 version: 0.2
 
+# Set an environment variable that can be used below in the build phases.
 env:
   variables:
-    DOCKER_USERNAME: "ayeshabanewale"
-    IMAGE_NAME: "society"
-    IMAGE_TAG: "V1"
-  parameter-store:
-    DOCKER_PASSWORD: "docker_password"
+    TEST_VAR: "t2.micro"
 phases:
   install:
-    runtime-versions:
-      python: 3.11
+    commands:
+      - echo Entered the install phase
+      - apt-get update -y
+    finally:
+      - echo This always runs even if the update or install command fails
   pre_build:
     commands:
-      - echo "Installing dependencies..."
-      - pip install -r day-14/simple-python-app/requirements.txt
-      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - echo Entered the pre_build phase...
+    finally:
+      - echo This always runs even if the login command fails
   build:
     commands:
-      - echo "Running tests..."
-      - cd day-14/simple-python-app/
-      - echo "Building Docker image..."
-      - docker build -t $IMAGE_NAME:$IMAGE_TAG .
-      - docker tag $IMAGE_NAME:$IMAGE_TAG $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+      - ls -altr
+      - printenv
+      - echo $TEST_VAR
+      - echo $AWS_REGION
+      - echo $CODEBUILD_BUILD_NUMBER
+      - echo Entered the build phase...
+      - echo Build started on `date`
+      - aws s3 ls
+    finally:
+      - echo This always runs even if the install command fails
   post_build:
-      - echo pushing docker image.....
     commands:
-      - echo "Build completed successfully!"
+      - echo Entered the post_build phase...
+      - echo Build completed on `date`
 
 
