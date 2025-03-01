@@ -1,36 +1,25 @@
 version: 0.2
-
-# Set an environment variable that can be used below in the build phases.
-env:
-  variables:
-    TEST_VAR: "t2.micro"
 phases:
   install:
-    commands:
-      - echo Entered the install phase
-      - apt-get update -y
-    finally:
-      - echo This always runs even if the update or install command fails
+    runtime-versions:
+      python: 3.11
   pre_build:
     commands:
-      - echo Entered the pre_build phase...
-    finally:
-      - echo This always runs even if the login command fails
+      - echo "Installing dependencies..."
+      - pip install -r day-13/simple-python-app/requirements.txt
   build:
     commands:
-      - ls -altr
-      - printenv
-      - echo $TEST_VAR
-      - echo $AWS_REGION
-      - echo $CODEBUILD_BUILD_NUMBER
-      - echo Entered the build phase...
-      - echo Build started on `date`
-      - aws s3 ls
-    finally:
-      - echo This always runs even if the install command fails
+      - echo "Running tests..."
+      - cd day-13/simple-python-app/
+      - echo "Building Docker image..."
+      - docker login -u ayeshabanewale -p Ayesha@24
+      - docker build -t simple-python-flask-app:latest .
+      - docker tag simple-python-flash-app:latest ayeshabanewale/society:latest
+      
   post_build:
     commands:
-      - echo Entered the post_build phase...
-      - echo Build completed on `date`
+      - echo "Build completed successfully!"
+      - docker push ayeshabanewale/society:latest
+
 
 
