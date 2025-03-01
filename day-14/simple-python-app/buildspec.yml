@@ -24,7 +24,7 @@ phases:
       - docker build -t $IMAGE_NAME:$IMAGE_TAG .
       - docker tag $IMAGE_NAME:$IMAGE_TAG $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
   post_build:
-      - echo pushing docjer image.....
+      - echo pushing docker image.....
       - docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
     commands:
       - echo "Build completed successfully!"
